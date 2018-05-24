@@ -13,10 +13,10 @@
       <div class="container">
           <div class="field is-grouped is-grouped-centered">
               <p class="control">
-                  <input class="input" type="text" placeholder="Name" min="1" maxlength="30" v-model="task.name">
+                  <input class="input" type="text" placeholder="Name" min="1" maxlength="30" v-model="taskInput.name">
               </p>
               <p class="control is-expanded">
-                  <input class="input" type="text" placeholder="Description" maxlength="60" v-model="task.description">
+                  <input class="input" type="text" placeholder="Description" maxlength="60" v-model="taskInput.description">
               </p>
               <p class="control">
                   <button class="button is-info" v-on:click="createTask">
@@ -30,15 +30,6 @@
 
           <div class="field is-grouped is-grouped-centered">
               <p class="control">
-                  <button class="button is-info" v-on:click="clearTodos">
-                      Clear ToDo's
-                  </button>
-                  <button class="button is-success" v-on:click="clearInProgress">
-                      Clear In Progress
-                  </button>
-                  <button class="button is-warning" v-on:click="clearCompleted">
-                      Clear Completed
-                  </button>
                   <button class="button is-danger" v-on:click="deleteAll">
                       Delete All
                   </button>
@@ -71,8 +62,7 @@
                               </div>
                           </div>
                           <footer class="card-footer">
-                              <a href="#" class="card-footer-item">Delete</a>
-                              <a href="#" class="card-footer-item" @click="updateTaskStatus(todoTask.id, 'progress')">In Progress >></a>
+                              <a class="card-footer-item button is-success" @click="updateTaskStatus(todoTask.id, 'progress')">In Progress >></a>
                           </footer>
                       </div>
                   </div>
@@ -100,9 +90,8 @@
                               </div>
                           </div>
                           <footer class="card-footer">
-                              <a href="#" class="card-footer-item" @click="updateTaskStatus(progressTask.id, 'todo')"><< ToDo</a>
-                              <a href="#" class="card-footer-item">Delete</a>
-                              <a href="#" class="card-footer-item" @click="updateTaskStatus(progressTask.id, 'completed')">Completed >></a>
+                              <a href="#" class="card-footer-item button is-danger" @click="updateTaskStatus(progressTask.id, 'todo')"><< ToDo</a>
+                              <a href="#" class="card-footer-item button is-success" @click="updateTaskStatus(progressTask.id, 'completed')">Completed >></a>
                           </footer>
                       </div>
                   </div>
@@ -130,8 +119,7 @@
                               </div>
                           </div>
                           <footer class="card-footer">
-                              <a href="#" class="card-footer-item" @click="updateTaskStatus(completedTask.id, 'progress')"><< In Progress</a>
-                              <a href="#" class="card-footer-item">Delete</a>
+                              <a href="#" class="card-footer-item button is-danger" @click="updateTaskStatus(completedTask.id, 'progress')"><< In Progress</a>
                           </footer>
                       </div>
                   </div>
@@ -149,8 +137,6 @@
         name: 'app',
 
         created() {
-
-            // ls.clear();
 
             this.buildBoard();
 
@@ -210,14 +196,14 @@
 
                 let validTask = true;
 
-                if (!this.task.name) {
+                if (!this.taskInput.name) {
 
                     validTask = false;
                     this.validateTask.name = false;
 
                 }
 
-                if (!this.task.description) {
+                if (!this.taskInput.description) {
 
                     validTask = false;
                     this.validateTask.description = false;
@@ -240,8 +226,8 @@
                 let task = {
 
                     id: this.tasks.length,
-                    name: this.task.name,
-                    description: this.task.description,
+                    name: this.taskInput.name,
+                    description: this.taskInput.description,
                     status: 'todo',
                     created: Date()
 
@@ -270,16 +256,16 @@
 
             clearCreateForm() {
 
-                this.task.name = '';
-                this.task.description = '';
+                this.taskInput.name = '';
+                this.taskInput.description = '';
 
             },
 
             clearTask() {
 
-                this.task.name = '';
-                this.task.description = '';
-                this.task.status = 'todo';
+                this.taskInput.name = '';
+                this.taskInput.description = '';
+                this.taskInput.status = 'todo';
 
             },
 
@@ -292,24 +278,6 @@
                 ls.set('tasks', tasks);
 
                 this.buildBoard();
-
-            },
-
-            clearTodos() {
-
-                this.todoTasks = [];
-
-            },
-
-            clearInProgress() {
-
-                this.progressTasks = [];
-
-            },
-
-            clearCompleted() {
-
-                this.completedTasks = [];
 
             },
 
@@ -331,6 +299,10 @@
                 validateTask: {
                     name: true,
                     description: true
+                },
+                taskInput: {
+                    name: '',
+                    description: ''
                 },
                 task: {
                     name: '',
